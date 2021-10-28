@@ -1,14 +1,32 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useContext} from 'react';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import ContactItem from './ContactItem';
 import ContactContext from '../../context/contact/contactContext';
 
 const Contacts = () => {
     const contactContext = useContext(ContactContext);
 
-    return (
-        <div>
-            
-        </div>
-    )
-}
+    const { contacts, filtered } = contactContext;
 
-export default Contacts
+    if(contacts.length === 0){
+        return (<h4>Please add a contact</h4>);
+    }
+
+    return (
+        <Fragment>
+            <TransitionGroup>
+                {filtered !== null ? filtered.map(contact => (
+                    <CSSTransition key={contact.id} classNames='item' timeout={500}>
+                        <ContactItem contact={contact}/>
+                    </CSSTransition>
+                )):contacts.map(contact => (
+                    <CSSTransition key={contact.id} classNames='item' timeout={500}>
+                        <ContactItem contact={contact}/>
+                    </CSSTransition>
+                ))}
+            </TransitionGroup>
+        </Fragment>
+    );
+};
+
+export default Contacts;
